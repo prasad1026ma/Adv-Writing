@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Reflection Journey</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9fafb;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        h1, h3 {
+            text-align: center;
+            color: #0073e6;
+        }
+
+        .flowchart-container {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .node, .decision {
+            background-color: #ffffff;
+            border: 2px solid #0073e6;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 10px auto;
+            width: 250px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .node:hover, .decision button:hover {
+            transform: scale(1.05);
+            background-color: #f0f8ff;
+        }
+
+        .decision {
+            display: none;
+        }
+
+        .decision button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #0073e6;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+
+        .decision button:hover {
+            background-color: #005bb5;
+        }
+
+        .outcome {
+            display: none;
+            margin-top: 20px;
+            background-color: #f0f8ff;
+            border: 1px solid #0073e6;
+            border-radius: 5px;
+            padding: 15px;
+            color: #333;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="flowchart-container">
+    <h1>Welcome to Your Second Reflection Writing for Advanced Writing</h1>
+    <p>In this assignment, you must reflect on times/instances when you have had to unlearn to learn. Are you ready to begin?</p>
+    
+    <div id="stage1" class="node" onclick="showDecision('stage1')">
+        Stage 1: First Draft Submitted
+    </div>
+    <div id="stage2" class="node" onclick="showDecision('stage2')" style="display:none;">
+        Stage 2: Peer Feedback Received
+    </div>
+    <div id="stage3" class="node" onclick="showDecision('stage3')" style="display:none;">
+        Stage 3: Revising with Details
+    </div>
+    <div id="stage4" class="node" onclick="showDecision('stage4')" style="display:none;">
+        Stage 4: Final Submission
+    </div>
+
+    <!-- Stage 1 -->
+    <div id="stage1Decision" class="decision">
+        <h3>You have created your first essay draft...</h3>
+        <p>"You wrote about how you had to learn to appreciate the phrase 'work smarter, not harder.' Your draft gives a generic overview, hoping it would be enough. What do you do next?"</p>
+        <button onclick="progress('stage2')">Submit and Wait</button>
+    </div>
+
+    <!-- Stage 2 -->
+    <div id="stage2Decision" class="decision">
+        <h3>Peer Feedback: OH NO!</h3>
+        <p>"Your professor comments that your piece is lacking in detail. It feels like you're telling the reader rather than showing them. What do you do?"</p>
+        <button onclick="peerFeedback()">Option A: Read Peers’ Essays</button>
+        <button onclick="endJourney('This leads you to not gain a meaningful insight from the assignment.')">
+            Option B: Forget About It
+        </button>
+    </div>
+
+    <!-- Messages After Peer Feedback -->
+    <div id="peerFeedbackMessages" class="outcome">
+        <h3>Reflection After Peer Feedback</h3>
+        <p>"This is a great next step to understand what it means to add details in your work that give it character."</p>
+        <button onclick="progress('stage3')">Continue to Revising</button>
+    </div>
+
+    <!-- Stage 3 -->
+    <div id="stage3Decision" class="decision">
+        <h3>Revising with Details</h3>
+        <p>"You read your peers' work and realize what it means to add details that make writing vivid. What details do you focus on?"</p>
+        <button onclick="revisionFeedback('OptionA')">
+            Option A: Details on how you learned to appreciate 'work smarter, not harder.'
+        </button>
+        <button onclick="revisionFeedback('OptionB')">
+            Option B: Details on where the phrase comes from
+        </button>
+    </div>
+
+    <!-- Messages After Revision -->
+    <div id="revisionFeedbackMessages" class="outcome">
+        <h3>Reflection After Revision</h3>
+        <p id="revisionMessage"></p>
+        <button onclick="progress('stage4')">Proceed to Final Submission</button>
+    </div>
+
+    <!-- Stage 4 -->
+    <div id="stage4Decision" class="decision">
+        <h3>Final Submission</h3>
+        <p>"After rewriting and emphasizing your journey, should you seek one last round of feedback or trust your instincts and submit?"</p>
+        <button onclick="progress('outcomeFeedback')">
+            Option 1: Seek One Last Round of Feedback
+        </button>
+        <button onclick="progress('outcomeInstincts')">
+            Option 2: Trust Your Instincts and Submit
+        </button>
+    </div>
+
+    <!-- Outcomes -->
+    <div id="outcomeFeedback" class="outcome">
+        <h3>Outcome: Collaboration Wins</h3>
+        <p>By embracing collaboration one more time, you ensured your work is as strong as possible. A small but critical improvement made your argument shine.</p>
+    </div>
+    <div id="outcomeInstincts" class="outcome">
+        <h3>Outcome: Confidence Pays Off</h3>
+        <p>Your confidence was validated with a positive reception. Trusting your instincts demonstrated your growth in judgment and writing skill.</p>
+    </div>
+    <div id="journeyEnd" class="outcome"></div>
+</div>
+
+<script>
+    function showDecision(stage) {
+        // Hide all nodes and decisions
+        document.querySelectorAll('.node, .decision').forEach(el => el.style.display = 'none');
+
+        // Show the current stage and its decision
+        document.getElementById(stage).style.display = 'inline-block';
+        document.getElementById(stage + 'Decision').style.display = 'block';
+    }
+
+    function peerFeedback() {
+        // Hide current decision and show peer feedback messages
+        document.querySelectorAll('.decision').forEach(el => el.style.display = 'none');
+        document.getElementById('peerFeedbackMessages').style.display = 'block';
+    }
+
+    function revisionFeedback(option) {
+        // Hide current decision and show revision feedback messages
+        document.querySelectorAll('.decision').forEach(el => el.style.display = 'none');
+        const revisionMessage = document.getElementById('revisionMessage');
+        if (option === 'OptionA') {
+            revisionMessage.innerHTML = "Good choice! This allows you to make your journey stronger, giving key details on how it affected you.";
+        } else {
+            revisionMessage.innerHTML = "Though this adds more details, it doesn't show why you had to unlearn to learn. Adding details must resonate with the reader, not just add more words.";
+        }
+        document.getElementById('revisionFeedbackMessages').style.display = 'block';
+    }
+
+    function progress(nextStage) {
+        // Hide all current decisions and outcomes and show the next stage
+        document.querySelectorAll('.decision, .outcome').forEach(el => el.style.display = 'none');
+        document.getElementById(nextStage).style.display = 'inline-block';
+    }
+
+    function endJourney(message) {
+        document.querySelectorAll('.decision').forEach(el => el.style.display = 'none');
+        const endMessage = document.getElementById('journeyEnd');
+        endMessage.innerHTML = `<h3>Journey Ended</h3><p>${message}</p>`;
+        endMessage.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
